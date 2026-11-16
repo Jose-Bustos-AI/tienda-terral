@@ -69,10 +69,25 @@
 			relleno.style.width = Math.max(4, Math.min(100, total / GRATIS * 100)) + '%';
 		};
 		pintarEnvio(prestashop.cart);
+		// Al cambiar una cantidad o un cupón, se vuelve a pedir el carrito al servidor.
+		var esperaEnvio = null;
+		var refrescarEnvio = function () {
+			clearTimeout(esperaEnvio);
+			esperaEnvio = setTimeout(function () {
+				var url = prestashop.urls.pages.cart;
+				fetch(url + (url.indexOf('?') < 0 ? '?' : '&') + 'ajax=1&action=update', { headers: { 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json' }, credentials: 'same-origin' })
+					.then(function (r) { return r.json(); })
+					.then(function (d) { if (d && d.cart) pintarEnvio(d.cart); })
+					.catch(function () {});
+			}, 500);
+		};
 		if (prestashop.on) {
 			prestashop.on('updatedCart', function (e) {
-				if (e && e.resp && e.resp.cart) pintarEnvio(e.resp.cart);
+				if (e && e.resp && e.resp.cart) pintarEnvio(e.resp.cart); else refrescarEnvio();
 			});
+		}
+		if ('MutationObserver' in window) {
+			new MutationObserver(refrescarEnvio).observe(rejilla, { childList: true, subtree: true, characterData: true });
 		}
 	}
 
