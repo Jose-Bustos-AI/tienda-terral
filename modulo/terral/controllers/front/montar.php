@@ -410,6 +410,8 @@ class TerralMontarModuleFrontController extends ModuleFrontController
     private function rematar()
     {
         Search::indexation(true);
+        // Ajustes de la versión: textos para buscadores, nombre de la colección y fotos recortadas.
+        $this->module->actualizar();
         Tools::clearSmartyCache();
         Tools::clearXMLCache();
         Media::clearCache();

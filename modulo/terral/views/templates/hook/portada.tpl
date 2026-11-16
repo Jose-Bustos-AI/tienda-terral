@@ -93,4 +93,19 @@
       <a class="ter-btn" href="{$terral_tienda}">Empezar a comprar</a>
     </div>
   </section>
+
+  <section class="ter-faq" aria-labelledby="ter-faq-titulo">
+    <div class="ter-faq__cab">
+      <p class="ter-ceja ter-ceja--oscura">Antes de pedir</p>
+      <h2 class="ter-titulo" id="ter-faq-titulo">Preguntas <em>frecuentes</em></h2>
+      <p>Lo que más nos preguntan quienes compran piezas hechas a mano por primera vez.</p>
+    </div>
+    <div class="ter-faq__lista">
+      <details class="ter-revela" open><summary>¿Las piezas son todas iguales?</summary><p>No del todo. Están hechas a mano en tandas pequeñas, así que el tono de un lino o la forma de un jarrón pueden variar un poco de una pieza a otra.</p></details>
+      <details class="ter-revela"><summary>¿Cuánto tarda y cuánto cuesta el envío?</summary><p>El envío estándar llega en 48-72 h y cuesta 4,95 €; es gratis a partir de 60 €. El exprés llega en 24 h por 9,95 €.</p></details>
+      <details class="ter-revela"><summary>¿Y si no queda bien en casa?</summary><p>Tienes 30 días para cambiarlo o devolverlo. Nos escribes, lo recogemos y te devolvemos el importe cuando llega al taller.</p></details>
+      <details class="ter-revela"><summary>¿Cómo se cuidan el lino y el yute?</summary><p>El lino se lava a 30 grados y no hace falta plancharlo. El yute se sacude o se aspira y se mantiene lejos de la humedad. Cada producto lleva sus cuidados en la ficha técnica.</p></details>
+      <details class="ter-revela"><summary>¿Tengo que crear una cuenta para comprar?</summary><p>No. Puedes comprar como invitado, solo con tu correo y la dirección de entrega.</p></details>
+    </div>
+  </section>
 </div>

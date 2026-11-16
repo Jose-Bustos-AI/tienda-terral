@@ -19,7 +19,7 @@ class Terral extends PaymentModule
     {
         $this->name = 'terral';
         $this->tab = 'front_office_features';
-        $this->version = '1.0.0';
+        $this->version = '1.1.1';
         $this->author = 'Dania360';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -119,6 +119,94 @@ class Terral extends PaymentModule
     public function hookDisplayFooterAfter()
     {
         return '<div class="terral-pie-base">© Terral · Tienda de ejemplo hecha por <a href="https://tiendas.dania360.com/">Dania360</a> con PrestaShop · Fotos creadas para la marca</div>';
+    }
+
+    /* ---------- Puesta al día de una tienda ya instalada ---------- */
+
+    /**
+     * Aplica los ajustes de la versión actual sobre la tienda instalada: textos para buscadores,
+     * nombre de la página con toda la colección, fotos de producto recortadas y cachés.
+     * Se puede ejecutar las veces que haga falta.
+     */
+    public function actualizar()
+    {
+        $hecho = [];
+        $idiomas = Language::getIDs(false);
+
+        // Portada: título y descripción para buscadores y para compartir.
+        $meta = Meta::getMetaByPage('index', (int) Configuration::get('PS_LANG_DEFAULT'));
+        if ($meta && !empty($meta['id_meta'])) {
+            $m = new Meta((int) $meta['id_meta']);
+            foreach ($idiomas as $id) {
+                $m->title[$id] = 'Terral · Hogar y decoración mediterránea hecha a mano';
+                $m->description[$id] = 'Cojines de lino, alfombras de yute, cerámica y lámparas de fibras naturales hechos a mano por talleres del Mediterráneo. Envío gratis desde 60 €.';
+            }
+            $hecho[] = 'portada ' . ($m->save() ? 'ok' : 'fallo');
+        }
+
+        // La página con todos los productos se llamaba "Inicio".
+        $cat = new Category((int) Configuration::get('PS_HOME_CATEGORY'));
+        if (Validate::isLoadedObject($cat)) {
+            foreach ($idiomas as $id) {
+                $cat->name[$id] = 'Toda la colección';
+                $cat->link_rewrite[$id] = 'coleccion';
+                $cat->description[$id] = '<p>Textil, mesa, iluminación y decoración: todas las piezas de Terral, hechas a mano con materiales naturales.</p>';
+                $cat->meta_title[$id] = 'Toda la colección';
+                $cat->meta_description[$id] = 'Todas las piezas de Terral: textil de lino y yute, cerámica, iluminación de fibras naturales y decoración hecha a mano.';
+            }
+            $hecho[] = 'coleccion ' . ($cat->save() ? 'ok' : 'fallo');
+        }
+
+        $hecho[] = 'fotos ' . $this->recortarFotos();
+
+        Tools::clearSmartyCache();
+        Media::clearCache();
+        Configuration::updateValue('TERRAL_VER', $this->version);
+        $hecho[] = 'version ' . $this->version;
+
+        return implode(' | ', $hecho);
+    }
+
+    /**
+     * Rehace las miniaturas de producto recortando la foto al centro, para que llenen
+     * su marco en lugar de llevar franjas blancas a los lados.
+     */
+    private function recortarFotos()
+    {
+        $tipos = ImageType::getImagesTypes('products');
+        $n = 0;
+        foreach (Image::getAllImages() as $fila) {
+            $imagen = new Image((int) $fila['id_image']);
+            $base = _PS_PRODUCT_IMG_DIR_ . $imagen->getExistingImgPath();
+            if (!is_file($base . '.jpg')) {
+                continue;
+            }
+            $origen = @imagecreatefromjpeg($base . '.jpg');
+            if (!$origen) {
+                continue;
+            }
+            $w = imagesx($origen);
+            $h = imagesy($origen);
+            foreach ($tipos as $tipo) {
+                $tw = (int) $tipo['width'];
+                $th = (int) $tipo['height'];
+                $escala = max($tw / $w, $th / $h);
+                $cw = (int) round($tw / $escala);
+                $ch = (int) round($th / $escala);
+                $lienzo = imagecreatetruecolor($tw, $th);
+                imagecopyresampled($lienzo, $origen, 0, 0, (int) (($w - $cw) / 2), (int) (($h - $ch) / 2), $tw, $th, $cw, $ch);
+                $destino = $base . '-' . stripslashes($tipo['name']);
+                imagejpeg($lienzo, $destino . '.jpg', 90);
+                if (is_file($destino . '.webp') && function_exists('imagewebp')) {
+                    imagewebp($lienzo, $destino . '.webp', 88);
+                }
+                imagedestroy($lienzo);
+                ++$n;
+            }
+            imagedestroy($origen);
+        }
+
+        return $n;
     }
 
     /* ---------- Pago de prueba ---------- */

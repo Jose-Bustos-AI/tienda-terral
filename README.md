@@ -18,7 +18,7 @@ modulo/terral/views/                    Plantilla de la portada, CSS sobre el te
 - PrestaShop 9.2 con el tema oficial Hummingbird, en el hosting de Hostinger, con su propio subdominio y certificado de seguridad
 - Módulo propio para PrestaShop que añade la portada, los estilos, el aviso de tienda de prueba y el pago de prueba
 - Paleta mediterránea (cal, terracota y añil) y tipografías Instrument Serif y Figtree servidas desde la propia tienda
-- Portada con foto a pantalla completa, categorías con foto, novedades, "Compra el look" e historia de los talleres, sin animaciones si el visitante pide menos movimiento
+- Portada con foto a pantalla completa, categorías con foto, novedades, "Compra el look", historia de los talleres y preguntas frecuentes desplegables, sin animaciones si el visitante pide menos movimiento
 - Tienda, carrito y pago en español
 
 ## Catálogo y compra
@@ -27,16 +27,20 @@ modulo/terral/views/                    Plantilla de la portada, CSS sobre el te
 - Ficha técnica en cada producto (material, medidas, cuidados y taller de origen)
 - Ofertas con precio tachado y etiqueta de descuento
 - "Compra el look": una foto de un salón con un punto en cada pieza que abre su tarjeta con precio y enlace; en el móvil la tarjeta sale abajo
-- Fotos de producto creadas para la marca
+- Fotos de producto creadas para la marca, recortadas para llenar su marco en tarjetas y fichas
+- Página "Toda la colección" con los 12 productos y su propia dirección
 - Dos transportistas: envío estándar a 4,95 € y gratis desde 60 €, y exprés en 24 h a 9,95 €
 - Cupón de bienvenida BIENVENIDA10 con un 10 % de descuento
+- Aviso en el carrito de cuánto falta para el envío gratis, con barra de progreso
 - Compra como invitado, sin tener que crear cuenta
 - Pago de prueba propio que no pide tarjeta y deja el pedido como pagado, con su factura
-- Dos pedidos de prueba completos: con combinaciones, cupón y envío gratis, y desde el móvil con envío exprés
+- Pedidos de prueba completos: con combinaciones, cupón y envío gratis, y otro desde el móvil tras la última actualización, también con cupón y envío gratis
 
 ## Detalles
 - Sin módulos de pago: lo propio está en un módulo hecho a medida
 - Montaje automático del catálogo, las imágenes, los transportistas, el cupón y el pago desde el propio módulo
+- El módulo se actualiza sobre la tienda instalada, sin reinstalarla ni perder pedidos
+- Título y descripción para buscadores en la portada y en la colección
 - Módulos de la demo retirados y textos del pie y de las garantías adaptados a la tienda
 - Lista para conectar Redsys, Bizum o Stripe cuando sea una tienda real
 
